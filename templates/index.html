@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fire Detection Dashboard</title>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            text-align: center;
+            font-family: Arial;
+        }
+        .status-safe {
+            color: lime;
+            font-size: 36px;
+        }
+        .status-fire {
+            color: red;
+            font-size: 36px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.4; }
+        }
+        img {
+            border: 5px solid #444;
+            margin-top: 20px;
+            width: 640px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🔥 Fire Detection System</h1>
+
+<div id="status" class="status-safe">SAFE</div>
+
+<img src="{{ url_for('static', filename='fire.png') }}">
+
+
+<script>
+setInterval(() => {
+    fetch("/status")
+        .then(res => res.json())
+        .then(data => {
+            let s = document.getElementById("status");
+            if (data.fire) {
+                s.innerText = "🔥 FIRE DETECTED";
+                s.className = "status-fire";
+            } else {
+                s.innerText = "SAFE";
+                s.className = "status-safe";
+            }
+        });
+}, 1000);
+</script>
+
+</body>
+</html>
